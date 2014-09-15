@@ -27,8 +27,11 @@ perms xs = [(v:p) | (v, vs) <- split xs, p <- perms vs]
 smooth n (x:y:ys) = abs (y - x) <= n && smooth n (y:ys)
 smooth _ _ = True
 
-smooth_perms :: Int -> [Int] -> [[Int]]
-smooth_perms n xs = filter (smooth n) (perms xs)
+smoothPerms' :: Int -> [Int] -> [[Int]]
+smoothPerms' n xs = filter (smooth n) (perms xs)
+
+smoothPerms :: Int -> [Int] -> [[Int]]
+smoothPerms n = concatMap pathLists . pruneTree n . buildTree
 
 data Tree a = Tree a [Tree a]
     deriving (Show)
@@ -44,12 +47,12 @@ pathLists (Tree x []) = [[x]]
 pathLists (Tree x xs) = map (x:) (concatMap pathLists xs)
 
 pruneTree :: Int -> [Tree Int] -> [Tree Int]
-pruneTree n = concatMap (pruneTree' n)
-pruneTree' n (Tree x []) = [Tree x []]
-pruneTree' n (Tree x xs) = 
-    case concatMap (pruneTree' n) (filter (checkDistance n x . root) xs) of
-        [] -> []
-        ys -> [Tree x ys]
+pruneTree n = concatMap (pruneTree' n) where
+    pruneTree' n (Tree x []) = [Tree x []]
+    pruneTree' n (Tree x xs) = 
+        case concatMap (pruneTree' n) (filter (checkDistance n x . root) xs) of
+            [] -> []
+            ys -> [Tree x ys]
 
     
 
