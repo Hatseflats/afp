@@ -8,7 +8,7 @@ class Counter r where
 
 instance Counter Int where
 	count' = id
-    --count' = \x -> 0
+    --count' = const 0
 
 instance (Counter r) => Counter (a -> r) where
     count' acc = \x -> count' (acc+1)

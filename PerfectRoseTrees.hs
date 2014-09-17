@@ -53,6 +53,7 @@ paths :: PerfectRoseTree a -> [[a]]
 paths (PerfectRoseTree t) = paths' t
 
 forestPaths' :: PerfectRoseForest' depth a -> [[a]]
+forestPaths' [] = [[]]
 forestPaths' ts = ts >>= paths'
 
 forestPaths :: PerfectRoseForest a -> [[a]]

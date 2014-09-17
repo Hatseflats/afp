@@ -1,7 +1,8 @@
 {-#LANGUAGE GADTs#-}
-module Ass1 where
+module Assignment1 where
 import Data.List
 import PerfectRoseTrees
+import Data.Maybe
 
 -- | Creates a PerfectRoseForest from a list with the property that there is a one-to-one correspondence 
 --   between the permutations of the list and the paths from a root to a leaf in the forest
@@ -21,14 +22,18 @@ getPermForest (x:xs) = insert x (getPermForest xs) where
 perms :: [a] -> [[a]]
 perms = forestPaths . getPermForest
 
-prune :: Int -> PerfectRoseForest Int -> PerfectRoseForest Int
-prune n (PerfectRoseForest ts) = PerfectRoseForest $ concatMap (prune' n) ts
+prune :: Int -> PerfectRoseForest Int -> Maybe (PerfectRoseForest Int)
+prune n (PerfectRoseForest []) = Just (PerfectRoseForest [])
+prune n (PerfectRoseForest ts) = case map fromJust (filter isJust (map (prune' n) ts)) of
+                                    [] -> Nothing
+                                    ys -> Just (PerfectRoseForest ys)
 
-prune' :: Int -> PerfectRoseTree' depth Int -> PerfectRoseForest' depth Int
-prune' n (Leaf x)    = [Leaf x]
-prune' n (Node x ts) = case concatMap (prune' n) (filter (checkDistance n x . root') ts) of
-                          [] -> []
-                          ts' -> [Node x ts']
+prune' :: Int -> PerfectRoseTree' depth Int -> Maybe (PerfectRoseTree' depth Int)
+prune' 0 (Node _ _)  = Nothing
+prune' n (Leaf x)    = Just (Leaf x)
+prune' n (Node x ts) = case fmap (prune' n) (filter (checkDistance n x . root') ts) of
+                          []  -> Nothing
+                          ts' -> Just (Node x (map fromJust (filter isJust ts')))
     where checkDistance distance x y = abs(x-y) <= distance
 
 extract :: [a] -> [(a, [a])]
@@ -38,8 +43,6 @@ extract = extract' [] where
     
 -- | Computes all smooth permutations of a list
 smoothPerms :: Int -> [Int] -> [[Int]]
-smoothPerms n = forestPaths . prune n . getPermForest
-    
-perms' :: [a] -> [[a]]
-perms' [] = [[]]
-perms' xs = [(y:p) | (y, ys) <- extract xs, p <- perms' ys]
+smoothPerms n = maybePaths . prune n . getPermForest where
+    maybePaths Nothing   = []
+    maybePaths (Just ts) = forestPaths ts
