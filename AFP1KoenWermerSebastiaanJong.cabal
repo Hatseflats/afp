@@ -4,9 +4,10 @@
 name:                AFP1KoenWermerSebastiaanJong
 version:             0.1.0.0
 synopsis:            Advanced Functional Programming assignment 1
--- description:         
+description:         Includes a function that calculates all permutation of a list (optimized by using perfect rose trees), tests for this function
+                     and a function that takes 0 or more arguments and counts them.
 -- license:             
-license-file:        LICENSE
+-- license-file:        LICENSE
 author:              Koen Wermer & Sebastiaan Jong
 -- maintainer:          
 -- copyright:           
@@ -17,4 +18,4 @@ cabal-version:       >=1.8
 library
   exposed-modules:     PerfectRoseTrees, Exercise71, Exercise25, Exercise81
   -- other-modules:       
-  build-depends:       base==4.6.*, criterion==1.0.1.0, QuickCheck==2.7.6, deepseq==1.*
+  build-depends:       base>=4.6.0.0, criterion==1.0.1.0, QuickCheck==2.7.6, deepseq==1.*
