@@ -8,8 +8,6 @@ import Test.QuickCheck
 
 import Control.DeepSeq
 import Data.List
-import Test.QuickCheck
-import Criterion
 
 split [] = []
 split (x:xs) = (x, xs):[(y, x:ys) | (y, ys) <- split xs]
