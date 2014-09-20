@@ -1,4 +1,4 @@
---2.5
+module Exercise25 where
 
 test :: [Int]
 test = [count, count 1 2 3, count "" [True, False] id (+)]
@@ -15,4 +15,3 @@ instance (Counter r) => Counter (a -> r) where
 
 count :: (Counter a) => a
 count = count' 0
---

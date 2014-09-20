@@ -1,5 +1,5 @@
 {-#LANGUAGE GADTs#-}
-module Assignment1 where
+module Exercise71 where
 import Data.List
 import PerfectRoseTrees
 import Data.Maybe
