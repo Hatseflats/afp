@@ -7,8 +7,8 @@ class Counter r where
 	count' :: Int -> r
 
 instance Counter Int where
-	count' = id
-    --count' = const 0
+	count' = id -- Always returns the number of arguments
+    --count' = const 0 -- Always returns a zero, independent of the number of arguments
 
 instance (Counter r) => Counter (a -> r) where
     count' acc = \x -> count' (acc+1)

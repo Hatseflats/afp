@@ -1,5 +1,11 @@
+module Exercise81 where
+
 import Exercise71
 import Exercise25
+
+import Criterion
+import Test.QuickCheck
+
 import Control.DeepSeq
 import Data.List
 
