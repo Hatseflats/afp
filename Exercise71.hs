@@ -22,12 +22,14 @@ getPermForest (x:xs) = insert x (getPermForest xs) where
 perms :: [a] -> [[a]]
 perms = forestPaths . getPermForest
 
+-- | Prunes a forest to remove paths that aren't smooth
 prune :: Int -> PerfectRoseForest Int -> Maybe (PerfectRoseForest Int)
 prune n (PerfectRoseForest []) = Just (PerfectRoseForest [])
 prune n (PerfectRoseForest ts) = case map fromJust (filter isJust (map (prune' n) ts)) of
                                     [] -> Nothing
                                     ys -> Just (PerfectRoseForest ys)
 
+-- | Prunes a tree' to remove paths that aren't smooth
 prune' :: Int -> PerfectRoseTree' depth Int -> Maybe (PerfectRoseTree' depth Int)
 prune' 0 (Node _ _)  = Nothing
 prune' n (Leaf x)    = Just (Leaf x)
@@ -35,11 +37,6 @@ prune' n (Node x ts) = case fmap (prune' n) (filter (checkDistance n x . root') 
                           []  -> Nothing
                           ts' -> Just (Node x (map fromJust (filter isJust ts')))
     where checkDistance distance x y = abs(x-y) <= distance
-
-extract :: [a] -> [(a, [a])]
-extract = extract' [] where
-    extract' ys (x:xs) = (x, ys ++ xs) : extract' (ys ++ [x]) xs
-    extract' _  _      = []
     
 -- | Computes all smooth permutations of a list
 smoothPerms :: Int -> [Int] -> [[Int]]
