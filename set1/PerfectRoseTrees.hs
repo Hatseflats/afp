@@ -39,22 +39,28 @@ root (PerfectRoseTree t) = case t of
 root' :: PerfectRoseTree' depth a -> a
 root' = root . PerfectRoseTree
 
+-- | Combines an element with a perfect rose forest by creating a perfect rose tree with the element as the root
 combine :: a -> PerfectRoseForest a -> PerfectRoseTree a
 combine x (PerfectRoseForest ts) = PerfectRoseTree (Node x ts)
 
+-- | Turns a tree into a forest with one tree
 toForest :: PerfectRoseTree a -> PerfectRoseForest a
 toForest (PerfectRoseTree t) = PerfectRoseForest [t]
 
+-- | Calculates all paths from root to leaf
 paths' :: PerfectRoseTree' depth a -> [[a]]
 paths' (Leaf x) = [[x]]
 paths' (Node x ts) = map (x:) (ts >>= paths')
 
+-- | Calculates all paths from root to leaf
 paths :: PerfectRoseTree a -> [[a]]
 paths (PerfectRoseTree t) = paths' t
 
+-- | Calculates all paths from root to leaf, the empty forest is considered to have the empty path
 forestPaths' :: PerfectRoseForest' depth a -> [[a]]
 forestPaths' [] = [[]]
 forestPaths' ts = ts >>= paths'
 
+-- | Calculates all paths from root to leaf, the empty forest is considered to have the empty path
 forestPaths :: PerfectRoseForest a -> [[a]]
 forestPaths (PerfectRoseForest ts) = forestPaths' ts
