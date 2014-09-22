@@ -43,7 +43,6 @@ trace super this x = do
     return(r)
 
 main = do 
-    --print (runIdentity (fixObject fac 5))
 	print (runWriter (fixObject (fac `extendedBy` trace) 3))
 
 
