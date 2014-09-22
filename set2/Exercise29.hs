@@ -1,20 +1,21 @@
---p1, p2, p3 :: Int
+p1, p2, p3 :: Int
 p1 = start store 3 store 5 add stop
 p2 = start store 3 store 6 store 2 mul add stop
---p3 = start store 2 add stop
+p3 = start store 2 add stop
 
 start = \c -> c []
 
-store n = \l c -> c (l:n)
+store n = \xs c -> c (xs:n)
 
-stop (x:xs) = x
+stop :: [Int] -> Int
+stop (x:_) = x
 
-add = \(s:ss:sss) c -> c ([s+ss] ++ sss)
+add = \(x:y:xs) c -> c ([x+y] ++ xs)
 
-mul = \(s:ss:sss) c -> c ([s*ss] ++ sss)
+mul = \(x:y:xs) c -> c ([x*y] ++ xs)
 
 main = do
-	print p2
+	print (p1)
 
 
 
