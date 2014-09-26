@@ -1,0 +1,16 @@
+opgave		punten
+1.1		1
+Installeren met cabal werkt.
+
+7.1		1
+Het werkt en is op de goede manier geïmplementeerd. Er is zelf een iets snellere versie waarbij het prunen al tijdens het bouwen van de boom gedaan wordt. Duidelijke code en commentaar.
+
+8.1		1
+Tests, heap profiling en bench marks geïmplementeerd.
+
+2.5		1
+Beide versies van count werken en zijn netjes geïmplementeerd.
+
+9.1		1
+Het bewijs klopt en is goed leesbaar.
+Het is denk ik netter om van te voren aan te geven dat je inductie gaat gebruiken i.p.v. alleen midden in de lemma opeens "Using induction hypothesis" te zetten. In dit geval is het niet echt van belang, maar lastigere bewijzen zijn veel makkelijker te volgen als van te voren duidelijk is welke kant het bewijs op gaat.

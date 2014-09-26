@@ -1,0 +1,15 @@
+opgave		punten
+1.1		1
+Installeren met cabal werkt.
+
+7.1		1
+Het werkt en is op de goede manier geïmplementeerd. Verder lijkt de code me duidelijk, hoewel het moeilijk is hier een oordeel over te geven als je het zelf geschreven hebt.
+
+8.1		1
+Tests, heap profiling en bench marks geïmplementeerd.
+
+2.5		1
+Beide versies van count werken en zijn netjes geïmplementeerd.
+
+9.1		1
+Een kloppend bewijs waarbij alle stappen duidelijk toegelicht zijn.
