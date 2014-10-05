@@ -10,3 +10,4 @@ fac :: Int -> Int
 fac = y f where
     f g 0 = 1
     f g n = n * g (n - 1)
+
