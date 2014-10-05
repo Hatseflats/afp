@@ -1,4 +1,4 @@
-{-#LANGUAGE GADTs#-}
+{-#LANGUAGE GADTs, EmptyDataDecls#-}
 
 --An alternative definition of square matrices, just for fun.
 module AlternativeSquares where
