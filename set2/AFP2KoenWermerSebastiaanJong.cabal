@@ -19,4 +19,4 @@ library
   exposed-modules:     AlternativeSquares, Exercise27, Exercise29, Exercise3, Exercise41, Exercise42 
   -- other-modules:       
   build-depends:       base>=4.6.0.0, mtl>=2.2.1
-  -- GHC-options: "-fsimpl-tick-factor=20000"
+  -- GHC-options: "-fsimpl-tick-factor=40000"
