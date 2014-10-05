@@ -42,7 +42,7 @@ trace super this x = do
     tell [Return r]
     return(r)
 
-main = do 
-	print (runWriter (fixObject (fac `extendedBy` trace) 3))
+--main = do 
+--	print (runWriter (fixObject (fac `extendedBy` trace) 3))
 
 
