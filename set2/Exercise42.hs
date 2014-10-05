@@ -1,4 +1,7 @@
 {-#LANGUAGE FlexibleContexts, FlexibleInstances#-}
+
+module Exercise42 where
+
 type Square a = Square' Nil a
 data Square' t a = Zero (t (t a)) | Succ (Square' (Cons t) a)
 data Nil a = Nil

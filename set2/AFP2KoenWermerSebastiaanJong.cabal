@@ -18,4 +18,4 @@ cabal-version:       >=1.8
 library
   exposed-modules:     AlternativeSquares, Exercise27, Exercise29, Exercise3, Exercise41, Exercise42 
   -- other-modules:       
-  build-depends:       base>=4.6.0.0
+  build-depends:       base>=4.6.0.0, mtl>=2.2.1

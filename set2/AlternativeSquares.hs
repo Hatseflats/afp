@@ -1,4 +1,7 @@
 {-#LANGUAGE GADTs#-}
+
+module AlternativeSquares where
+
 data O
 data Succ n
 

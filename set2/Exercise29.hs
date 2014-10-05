@@ -1,4 +1,7 @@
 {-#LANGUAGE GADTs#-}
+
+module Exercise29 where
+
 p1, p2 :: Int
 p1 = start store 3 store 5 add stop
 p2 = start store 3 store 6 store 2 mul add stop

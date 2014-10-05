@@ -1,5 +1,7 @@
 {-#LANGUAGE FlexibleContexts#-}
 
+module Exercise27 where
+
 import Control.Monad.State 
 import Control.Monad.Identity
 import Control.Monad.Writer

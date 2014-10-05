@@ -1,5 +1,6 @@
 {-# LANGUAGE MultiParamTypeClasses, FunctionalDependencies, FlexibleInstances, UndecidableInstances #-}
-module StateMonadPlus where
+
+module Exercise3 where
 
 import Control.Monad.State
 import Control.Monad.Identity

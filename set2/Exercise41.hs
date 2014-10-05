@@ -1,3 +1,5 @@
+module Exercise41 where
+
 data F a = F {unF :: F a -> a}
 
 y :: (a -> a) -> a
