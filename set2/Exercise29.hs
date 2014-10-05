@@ -30,8 +30,8 @@ add (x:+:y:+:xs) c = c ((x+y) :+: xs)
 mul :: Num a => (ListWithLength (Succ (Succ l)) a) -> ((ListWithLength (Succ l) a) -> b) -> b
 mul (x:+:y:+:xs) c = c ((x*y) :+: xs)
 
-main = do
-	print (p1)
+--main = do
+--	print (p1)
 
 
 
