@@ -19,7 +19,17 @@ pos :: (Num a, Ord a) => Contract a
 pos = Pred (>0)
 
 true :: Contract a
-true = Pred (\x->True)
+true = Pred (const True)
+
+{-
+Proof:
+Let x be of any type
+assert true x =                                                 by definition of true
+assert (Pred (const True)) x =                                  by definition of assert
+if ((const True) x) then x else error "contract violation" =    by definition of const
+if True then x else error "contract violation" =                by definition of if .. then .. else ..
+x
+-}
 
 func :: Contract (Integer -> Integer)
 func = (Fun pos pos) 
