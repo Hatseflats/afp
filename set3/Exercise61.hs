@@ -10,21 +10,21 @@ data Contract :: * -> * where
 assert :: Contract a -> a -> a
 assert (Pred p) x = if p x then x else error "contract violation"
 assert (Fun pre post) f = assert post . f . assert pre
+assert (DFun pre post) f = (\x -> assert (post x) (f (assert pre x)))
 
-assert' :: Contract a -> a -> a
-assert' (Pred p) x = if p x then x else error "contract violation"
-assert' (Fun pre post) f = assert' post . f . assert' pre
+(-->) :: Contract a -> Contract b -> Contract (a -> b)
+(-->) c c' = DFun c (\_ -> c')
+
+index :: Contract ([a] -> Int -> a)
+index = DFun true (\xs -> DFun true (\i -> Pred (\_ -> 0 <= i && i < length xs)))
+
+indexCheck = assert index (!!) [1..5] 2
 
 pos :: (Num a, Ord a) => Contract a
 pos = Pred (>0)
 
 true :: Contract a
-true = Pred (\x->True)
-
-func :: Contract (Integer -> Integer)
-func = (Fun pos pos) 
-
-
+true = Pred (\_->True)
 
 main = do
-    print $ assert func (\x -> x) 2
+    print $ indexCheck
