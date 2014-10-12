@@ -1,0 +1,15 @@
+opgave		punten
+2.7 		1
+De code werkt en het is duidelijk gedocumenteerd.
+
+2.9 		1
+Duidelijke implementatie. Twee variaties waarvan er eentje de invalide derde testcase niet laat typechecken.
+
+3 			1
+Goede implementatie met documentatie en meerdere quickcheck testcases.
+
+4.1 		1
+Op de goede manier opgelost, de code werkt nu.
+
+4.2			1
+Op de goede manier opgelost door het data type iets aan te passen.

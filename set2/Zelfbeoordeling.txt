@@ -1,0 +1,16 @@
+opgave		punten
+2.7 		1
+De code werkt en het is makkelijk te begrijpen.
+
+2.9 		1
+Alle test cases werken en de derde invalide testcase geeft een type error.
+
+3 			1
+De monad is netjes opgebouwd uit meerdere transformers. Alle features zijn goed geimplementeerd en werken. Het combineren van verschillende features werkt ook goed in de testcase.
+
+4.1 		1
+De functie typecheckt nu goed en de voorbeeld testcase werkt. 
+
+4.2			1
+De twee matrices zijn goed opgebouwd en er is zelfs nog een show functie voor gemaakt.
+
