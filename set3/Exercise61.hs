@@ -27,7 +27,19 @@ pos :: (Num a, Ord a) => Contract a
 pos = Pred (>0)
 
 true :: Contract a
-true = Pred (\_->True)
+true = Pred (const True)
+{-
+For any x, assert true x = x
+
+Proof:
+Let x be of any type
+assert true x =                                                 by definition of true
+assert (Pred (const True)) x =                                  by definition of assert
+if ((const True) x) then x else error "contract violation" =    by definition of const
+if True then x else error "contract violation" =                by definition of if .. then .. else ..
+x
+                                                                Q.E.D.
+-}
 
 indexCheck1 = assert index (!!) [1..5] 2
 indexCheck2 = assert index (!!) [0..7] 9

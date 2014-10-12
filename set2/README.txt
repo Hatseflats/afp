@@ -9,6 +9,7 @@ We defined ListWithLength to keep track of the size of the stack on type level, 
 
 4.1
 As a test, we used y to define factorial.
+This exercise is not included in the cabal file, because cabal can't handle the definition of y.
 
 4.2
 As a bonus we made squares instance of Show. 
