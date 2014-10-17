@@ -4,16 +4,15 @@ module Exercise61 where
 
 data Contract :: * -> * where
     Pred :: (a -> Bool) -> Contract a
-    Fun :: Contract a -> Contract b -> Contract (a -> b)
     DFun :: Contract a -> (a -> Contract b) -> Contract (a -> b)
     List :: Contract a -> Contract [a]
 
 assert :: Contract a -> a -> a
 assert (Pred p) x = if p x then x else error "contract violation"
-assert (Fun pre post) f = assert post . f . assert pre
 assert (DFun pre post) f = (\x -> assert (post x) (f (assert pre x)))
 assert (List c) xs = map (assert c) xs
 
+-- | Replaces the old Fun constructor
 (-->) :: Contract a -> Contract b -> Contract (a -> b)
 (-->) c c' = DFun c (\_ -> c')
 
