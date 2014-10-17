@@ -22,4 +22,6 @@ However, the case of forceBoolList is slightly different, because it completely 
 deepseq on lists of booleans, and forceBoolList is not entirely trivial:
 length [undefined] == 1
 length $ forceBoolList [undefined] == undefined
+
+However, forceBoolList has the downside that it rebuilds the whole list, even though you just want to evaluate it, therefore forceBoolList' is better.
 -}
