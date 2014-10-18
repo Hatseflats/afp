@@ -1,27 +1,22 @@
-x0 = 5
+f x y = (x, [y])
 
-f x = (x, x)
-
-x20 = f . f . f . f . f . f . f . f . f . f . f . f . f . f . f . f . f . f . f . f $ x0
+x = f . f . f
 
 {-
-x1 = (x0, x0)
-x2 = (x1, x1)
-x3 = (x2, x2)
-x4 = (x3, x3)
-x5 = (x4, x4)
-x6 = (x5, x5)
-x7 = (x6, x6)
-x8 = (x7, x7)
-x9 = (x8, x8)
-x10 = (x9, x9)
-x11 = (x10, x10)
-x12 = (x11, x11)
-x13 = (x12, x12)
-x14 = (x13, x13)
-x15 = (x14, x14)
-x16 = (x15, x15)
-x17 = (x16, x16)
-x18 = (x17, x17)
-x19 = (x18, x18)
+x has the following type: 
+
+a0 -> t0 -> (t1 -> (t2 -> (a0, t2), t1), t0)
+
+which has an amount of type variables equal to 2^N, where N is the number of composed f's.
+Because theres a new type variable required for every level it can not be internally represented using sharing.
+
+Found at:
+
+http://stackoverflow.com/questions/22060592/growth-of-type-definition-in-sml-using-hindley-milner-type-inference
+
+
 -}
+
+
+
+ 
