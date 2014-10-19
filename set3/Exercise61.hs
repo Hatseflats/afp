@@ -81,6 +81,3 @@ indexCheck2 = assert index (!!) [0..7] 9
 preserveCheck1 = assert (preserves length) reverse "Hello" == "olleH"
 preserveCheck2 = assert (preserves length) (take 5) "Hello" == "Hello"
 preserveCheck3 = assert (preserves length) (take 5) "Hello world" == undefined
-
-main = do
-    print $ all (>0) [1..5]

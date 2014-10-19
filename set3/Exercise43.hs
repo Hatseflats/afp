@@ -52,8 +52,8 @@ mapSquare = mapSquare' mapNil
 instance Functor Square where
     fmap = mapSquare
     
---Now let's test it on the squares from 4.2
-main =
+Now let's test it on the squares from 4.2
+test =
     do
         putStrLn "Equal to self:"
         print $ oneToNine == oneToNine && id2 == id2
