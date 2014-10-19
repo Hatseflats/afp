@@ -1,3 +1,5 @@
+module Exercise84 where
+
 forceBoolList :: [Bool] -> [Bool]
 forceBoolList []     = []
 forceBoolList (x:xs) = case x of

@@ -1,4 +1,5 @@
 {-#LANGUAGE RankNTypes, TypeSynonymInstances, FlexibleInstances#-}
+module Exercise43 where
 
 import Exercise42
 
@@ -52,7 +53,7 @@ mapSquare = mapSquare' mapNil
 instance Functor Square where
     fmap = mapSquare
     
-Now let's test it on the squares from 4.2
+--Now let's test it on the squares from 4.2
 test =
     do
         putStrLn "Equal to self:"
