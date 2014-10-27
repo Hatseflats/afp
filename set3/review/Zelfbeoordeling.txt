@@ -1,0 +1,19 @@
+opgave		punten
+4.3 		1
+The code is clear, and does what it's supposed to do.
+
+5.2 		1
+Both entailments proven using the basic entailment rules.
+
+5.3 		1
+Most general type given and evidence translation done.
+
+6.1 		1
+The code is clear, and does what it's supposed to do.
+The answers to the questions are correct.
+
+8.4		1
+forceBoolList is inplemented and the question question answered correctly.
+
+8.5		1
+A sequence that needs exponential space and time to type-check is given, and it's explained why it does this.

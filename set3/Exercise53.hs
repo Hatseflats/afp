@@ -1,4 +1,6 @@
 {-#LANGUAGE FlexibleContexts, PolymorphicComponents#-}
+module Exercise53 where
+
 import Prelude hiding (Monad)
 import qualified Control.Monad.Reader as R
 import qualified System.Random as R

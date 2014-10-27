@@ -1,3 +1,5 @@
+module Exercise52 where
+
 class A a
 class (A a) => B a
 instance A Bool

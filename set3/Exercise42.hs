@@ -1,5 +1,4 @@
 {-#LANGUAGE FlexibleContexts, FlexibleInstances#-}
-
 module Exercise42 where
 
 type Square = Square' Nil

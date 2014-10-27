@@ -1,0 +1,19 @@
+opgave		punten
+4.3 		1
+The code is clear, and does what it's supposed to do.
+
+5.2 		0.75
+The use of the closure rule is not made specific.
+
+5.3 		0
+Not done.
+
+6.1 		0.75
+The proof that true does what it should do is missing.
+
+8.4		1
+forceBoolList is inplemented and the question question answered correctly.
+Note that forceBoolList with type [Bool] -> [Bool] isn't entirely useless: 'length . forceBoolList' does something else then 'forceBoolList'.
+
+8.5		0
+It doesn't work and no explanation is given.
