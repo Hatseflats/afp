@@ -1,5 +1,6 @@
 import Network.Socket
 import Network.BSD
+import Control.Concurrent
 import Control.Concurrent.STM
 
 emptyClientList :: STM (TVar [(Socket, SockAddr)])
@@ -25,8 +26,7 @@ processConnection :: Socket -> TVar [(Socket, SockAddr)] -> IO ()
 processConnection serverSocket clientList = do
 	(clientSocket, clientAddr) <- accept serverSocket
 
-	atomically $ do
-		appendClient clientList (clientSocket, clientAddr)
+	atomically $ appendClient clientList (clientSocket, clientAddr)
 
 	processMessage clientList (clientSocket, clientAddr)
 
@@ -38,7 +38,8 @@ processMessage clientList connection@(clientSocket, clientAddr) = do
 		atomically $ removeClient clientList connection
 	else
 		do
-			broadcastMessage clientList message
+			--broadcastMessage clientList message
+			print message
 			processMessage clientList connection
 
 main = withSocketsDo $ do
@@ -53,7 +54,7 @@ main = withSocketsDo $ do
 	bind serverSocket (addrAddress addr)
 	listen serverSocket 5
 
-	--processConnection serverSocket
+	forkIO $ processConnection serverSocket clientList
 
 	close serverSocket
 
