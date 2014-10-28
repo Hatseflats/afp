@@ -2,9 +2,17 @@ import Network.Socket
 import Network.BSD
 import Control.Concurrent.STM
 
-processConnection :: Socket -> IO ()
-processConnection s = do
-	(clientSocket, clientAddress) <- accept s
+emptyClientList :: IO (TVar [(Socket, SockAddr)])
+emptyClientList = newTVarIO []
+
+appendClient :: TVar [(Socket, SockAddr)] -> (Socket, SockAddr) -> STM ()
+appendClient clientList connection = do
+	currentList <- readTVar clientList
+	writeTVar clientList (connection:currentList)
+
+processConnection :: Socket ->  TVar [(Socket, SockAddr)] -> IO ()
+processConnection serverSocket clientList = do
+	(clientSocket, clientAddress) <- accept serverSocket
 	processMessage clientSocket
 
 processMessage :: Socket -> IO () 
@@ -20,16 +28,17 @@ processMessage clientSocket = do
 
 main = withSocketsDo $ do
 	proto <- getProtocolNumber "tcp"
-	s <- socket AF_INET Stream proto
+	serverSocket <- socket AF_INET Stream proto
+	clientList <- emptyClientList
 
 	addrsInfo <- getAddrInfo Nothing (Just "localhost") (Just "8080") 
 	let addr = head addrsInfo
 
-	bind s (addrAddress addr)
-	listen s 5
+	bind serverSocket (addrAddress addr)
+	listen serverSocket 5
 
-	processConnection s
+	--processConnection serverSocket
 
-	close s
+	close serverSocket
 
 	print "exit"
