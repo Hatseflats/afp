@@ -2,34 +2,50 @@ import Network.Socket
 import Network.BSD
 import Control.Concurrent.STM
 
-emptyClientList :: IO (TVar [(Socket, SockAddr)])
-emptyClientList = newTVarIO []
+emptyClientList :: STM (TVar [(Socket, SockAddr)])
+emptyClientList = newTVar []
 
 appendClient :: TVar [(Socket, SockAddr)] -> (Socket, SockAddr) -> STM ()
 appendClient clientList connection = do
 	currentList <- readTVar clientList
 	writeTVar clientList (connection:currentList)
 
-processConnection :: Socket ->  TVar [(Socket, SockAddr)] -> IO ()
-processConnection serverSocket clientList = do
-	(clientSocket, clientAddress) <- accept serverSocket
-	processMessage clientSocket
+removeClient :: TVar [(Socket, SockAddr)] -> (Socket, SockAddr) -> STM ()
+removeClient clientList connection = do
+	currentList <- readTVar clientList
+	writeTVar clientList (filter (/= connection) currentList)
 
-processMessage :: Socket -> IO () 
-processMessage clientSocket = do
+broadcastMessage :: TVar [(Socket, SockAddr)] -> String -> IO ()
+broadcastMessage clientList message = do
+	currentList <- atomically $ readTVar clientList
+	mapM (((flip send) message) . fst) currentList
+	return ()
+
+processConnection :: Socket -> TVar [(Socket, SockAddr)] -> IO ()
+processConnection serverSocket clientList = do
+	(clientSocket, clientAddr) <- accept serverSocket
+
+	atomically $ do
+		appendClient clientList (clientSocket, clientAddr)
+
+	processMessage clientList (clientSocket, clientAddr)
+
+processMessage :: TVar [(Socket, SockAddr)] -> (Socket, SockAddr) -> IO () 
+processMessage clientList connection@(clientSocket, clientAddr) = do
 	message <- recv clientSocket 1024
 
 	if length message == 0 then
-		print "disconnect"
+		atomically $ removeClient clientList connection
 	else
 		do
-			print message
-			processMessage clientSocket
+			broadcastMessage clientList message
+			processMessage clientList connection
 
 main = withSocketsDo $ do
 	proto <- getProtocolNumber "tcp"
 	serverSocket <- socket AF_INET Stream proto
-	clientList <- emptyClientList
+	
+	clientList <- atomically emptyClientList
 
 	addrsInfo <- getAddrInfo Nothing (Just "localhost") (Just "8080") 
 	let addr = head addrsInfo
