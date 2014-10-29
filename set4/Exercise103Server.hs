@@ -1,46 +1,59 @@
+import Prelude hiding (catch)
+
 import Network.Socket
 import Network.BSD
+
 import Control.Concurrent
+import Control.Exception
 import Control.Concurrent.STM
 
-emptyClientList :: STM (TVar [(Socket, SockAddr)])
+emptyClientList :: STM (TVar [(String, Socket)])
 emptyClientList = newTVar []
 
-appendClient :: TVar [(Socket, SockAddr)] -> (Socket, SockAddr) -> STM ()
+appendClient :: TVar [(String, Socket)] -> (String, Socket) -> STM ()
 appendClient clientList connection = do
 	currentList <- readTVar clientList
 	writeTVar clientList (connection:currentList)
 
-removeClient :: TVar [(Socket, SockAddr)] -> (Socket, SockAddr) -> STM ()
+removeClient :: TVar [(String, Socket)] -> (String, Socket) -> STM ()
 removeClient clientList connection = do
 	currentList <- readTVar clientList
 	writeTVar clientList (filter (/= connection) currentList)
 
-broadcastMessage :: TVar [(Socket, SockAddr)] -> String -> IO ()
+broadcastMessage :: TVar [(String, Socket)] -> String -> IO [Int]
 broadcastMessage clientList message = do
 	currentList <- atomically $ readTVar clientList
-	mapM (((flip send) message) . fst) currentList
-	return ()
+	mapM (\(nickname, clientSocket) -> send clientSocket message) currentList
 
-processConnection :: Socket -> TVar [(Socket, SockAddr)] -> IO ()
+processConnection :: Socket -> TVar [(String, Socket)] -> IO ()
 processConnection serverSocket clientList = do
-	(clientSocket, clientAddr) <- accept serverSocket
+	(clientSocket, _) <- accept serverSocket
 
-	atomically $ appendClient clientList (clientSocket, clientAddr)
+	nickname <- recv clientSocket 1024
 
-	processMessage clientList (clientSocket, clientAddr)
+	let connection = (nickname, clientSocket)
 
-processMessage :: TVar [(Socket, SockAddr)] -> (Socket, SockAddr) -> IO () 
-processMessage clientList connection@(clientSocket, clientAddr) = do
+	broadcastMessage clientList (nickname ++ " has joined the chat")
+	atomically $ appendClient clientList connection
+	forkIO $ processMessage clientList connection `catch` disconnect clientList connection
+
+	processConnection serverSocket clientList
+
+disconnect :: TVar [(String, Socket)] -> (String, Socket) ->  SomeException -> IO ()
+disconnect clientList connection@(nickname, clientSocket) exception = 
+	do
+		close clientSocket
+		atomically $ removeClient clientList connection
+		broadcastMessage clientList (nickname ++ "has left the chat")
+		return ()
+
+processMessage :: TVar [(String, Socket)] -> (String, Socket) -> IO () 
+processMessage clientList connection@(nickname, clientSocket) = do
 	message <- recv clientSocket 1024
 
-	if length message == 0 then
-		atomically $ removeClient clientList connection
-	else
-		do
-			--broadcastMessage clientList message
-			print message
-			processMessage clientList connection
+	ints <- broadcastMessage clientList (nickname ++ " :" ++ message)
+	processMessage clientList connection
+	
 
 main = withSocketsDo $ do
 	proto <- getProtocolNumber "tcp"
@@ -54,7 +67,7 @@ main = withSocketsDo $ do
 	bind serverSocket (addrAddress addr)
 	listen serverSocket 5
 
-	forkIO $ processConnection serverSocket clientList
+	processConnection serverSocket clientList
 
 	close serverSocket
 
