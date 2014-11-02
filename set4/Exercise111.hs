@@ -98,6 +98,3 @@ instance Data a => Read' a where
                              c2  <- char ')'
                              return $ [c1] ++ str ++ [c2]
         
---Some simple type to test with
-data T a b = T a b deriving (Show, Typeable, Data)
-    
