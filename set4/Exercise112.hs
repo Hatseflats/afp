@@ -9,6 +9,11 @@ module Exercise122 where
 
 import GHC.Generics
 
+gread :: GRead a => String -> a
+gread s = case greadsPrec 0 s of
+             [(x, "")] -> x
+             _         -> error "No valid parse"
+
 class GRead a where
     greadsPrec :: Int -> String -> [(a,String)]
 
