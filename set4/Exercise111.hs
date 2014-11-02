@@ -6,6 +6,7 @@ import Data.Data
 import Data.Generics.Aliases
 import Text.ParserCombinators.ReadP
 import Control.Monad
+import Control.Applicative
 
 class Show' a where
     show' :: a -> String
@@ -41,7 +42,7 @@ instance Data a => Show' a where
         where c = toConstr x
               showParen b f = if b then showChar '(' . f . showChar ')' else f
               --hasFields assumes primitive types don't have fields
-              hasFields = if isAlgType (dataTypeOf x) then not . null . constrFields else const False
+              hasFields = if isAlgType (dataTypeOf x) then const True else const False
               [inf1, inf2] = take 2 (gmapQ (showsPrec' 11) x)
               showInfConstr c = let s = showConstr c in take (length s - 2) (drop 1 s)
               showComma x = case take 2 x of
@@ -54,7 +55,7 @@ instance Data a => Read' a where
              where
               -- Helper for recursive read
               gread' :: Data a' => ReadP a'
-              gread' = baseCase True `extR` baseCase False
+              gread' = baseCase False <|> baseCase True
                where
 
                 -- Determine result type
@@ -66,15 +67,15 @@ instance Data a => Read' a where
                 baseCase parens =
                   do
                      skipSpaces                     -- Discard leading space
-                     _ <- if parens then char '(' else return ' '
+                     if parens then char '(' else return ' '
                      skipSpaces                     -- Discard following space
                      str  <- parseConstr            -- Get a lexeme for the constructor
                      con  <- str2con str            -- Convert it to a Constr (may fail)
                      x    <- fromConstrM (readS_to_P (readsPrec' 11)) con -- Read the children
                      skipSpaces                     -- Discard leading space
-                     _ <- if parens then char ')' else return ' '
+                     if parens then char ')' else return ' '
                      skipSpaces                     -- Discard following space
-                     if False then return x else (if not parens && n > 10 && isAlgType myDataType && (not . null . constrFields . toConstr) x then return (error "parantheses error") else return (error $ (show . constrFields . toConstr) x))
+                     if not parens && n > 10 && isAlgType myDataType then return (error "parantheses error") else return x
                      
                 -- Turn string into constructor driven by the requested result type,
                 -- failing in the monad if it isn't a constructor of this data type
@@ -99,3 +100,4 @@ instance Data a => Read' a where
         
 --Some simple type to test with
 data T a b = T a b deriving (Show, Typeable, Data)
+    
