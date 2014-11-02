@@ -4,10 +4,12 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE DeriveGeneric#-}
 {-# LANGUAGE TypeOperators#-}
+{-# LANGUAGE UndecidableInstances#-}
 
 module Exercise122 where
 
 import GHC.Generics
+import Control.Applicative
 
 gread :: GRead a => String -> a
 gread s = case greadsPrec 0 s of
@@ -42,19 +44,26 @@ instance (GRead' a) => GRead' (M1 i d a) where
 
 instance (GRead' a, GRead' b) => GRead' (a :*: b) where
     greadsPrec' n x = [(a :*: b, x'')]
-        where   ((a, x'): _) = greadsPrec' n x
-                ((b, x''): _) = greadsPrec' n x'
+        where ((a, x'): _) = greadsPrec' n x
+              ((b, x''): _) = greadsPrec' n x'
+                
+instance (GRead' a, GRead' b) => GRead' (a :+: b) where
+    greadsPrec' n x = l ++ r
+        where l = map (\(a, r) -> (L1 a, r)) (greadsPrec' n x)
+              r = map (\(a, s) -> (R1 a, s)) (greadsPrec' n x)
 
+instance GRead' f => GRead (f a) where
+    greadsPrec = greadsPrec'
+    
+instance (Generic a, GRead' (Rep a)) => GRead a where
+    greadsPrec n s = map (\(x, r) -> (to x, r)) $ greadsPrec' n s
+              
 greadsPrecDefault :: (Generic a, GRead' (Rep a)) => Int -> String -> [(a,String)]
 greadsPrecDefault n x = [(to (fst rep), snd rep)]
     where (rep:_) = (greadsPrec' n x)
-
+    
 main = do
-    print (read "1" :: Int)
-    print (read "'a'" :: Char)
-    print (read "\"a\"" :: String)
-    print (read "T 1" :: T Int)
-    print (read "T (T 1)" :: T (T Int))
-    print (read "(3.1415, True)" :: (Float, Bool))
-    print (read "[0,1,1,2,3,5,8,13]" :: [Integer])
+    print (gread "1" :: Int)
+    print (gread "'a'" :: Char)
+    print (gread "\"abc\"" :: String)
 
