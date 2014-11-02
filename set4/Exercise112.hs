@@ -50,10 +50,11 @@ greadsPrecDefault n x = [(to (fst rep), snd rep)]
     where (rep:_) = (greadsPrec' n x)
 
 main = do
-    print $ (greadsPrecDefault 0 "1" :: [(Int, String)])
-    print $ (greadsPrecDefault 0 "'a'" :: [(Char, String)])
-    print $ (greadsPrecDefault 0 "'a'" :: [(String, String)])
-    --print $ (greadsPrecDefault 0 "T 1" :: [(T Int,String)])
-    --print $ (greadsPrecDefault 0 "(1,1)" :: [((Int,Int), String)])
-    --print $ (greadsPrecDefault 0 "True" :: [(Bool,String)])
+    print (read "1" :: Int)
+    print (read "'a'" :: Char)
+    print (read "\"a\"" :: String)
+    print (read "T 1" :: T Int)
+    print (read "T (T 1)" :: T (T Int))
+    print (read "(3.1415, True)" :: (Float, Bool))
+    print (read "[0,1,1,2,3,5,8,13]" :: [Integer])
 
