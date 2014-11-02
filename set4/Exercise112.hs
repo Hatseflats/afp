@@ -22,10 +22,18 @@ class GRead' f where
 instance GRead' U1 where
     greadsPrec' _ s = [(U1, s)]
 
+instance (GRead c) => GRead' (K1 i c) where
+    greadsPrec' n x = [(K1 (fst x'), snd x')]
+        where (x':_) = greadsPrec n x
+
+instance (GRead' a) => GRead' (M1 i d a) where
+    greadsPrec' n x = [(M1 (fst x'), snd x')]
+        where (x':_) = greadsPrec' n x
+
 greadsPrecDefault :: (Generic a, GRead' (Rep a)) => Int -> String -> [(a,String)]
-greadsPrecDefault n x = to (fst rep)
+greadsPrecDefault n x = [(to (fst rep), snd rep)]
     where (rep:_) = (greadsPrec' n x)
 
 main = do
-    --print $ (greadsPrec' 0 "5" :: [(Int,String)])
-    print $ "t"
+    print $ (greadsPrecDefault 0 "55 5" :: [(Int,String)])
+    --print $ lex "[1,2,3]" 
