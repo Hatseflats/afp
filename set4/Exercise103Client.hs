@@ -1,3 +1,5 @@
+module Client where
+
 import Network.Socket
 import Network.BSD
 

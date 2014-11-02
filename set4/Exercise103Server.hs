@@ -1,3 +1,5 @@
+module Server where
+
 import Prelude hiding (catch)
 
 import Network.Socket
