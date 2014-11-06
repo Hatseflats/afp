@@ -1,0 +1,13 @@
+opgave		punten
+10.3		1
+The chatserver works with multiple clients, the STM monad is properly used.
+
+11.1 		1
+Both the read and show instances work and there are tests included. There is a proper explaination of the differences between the 
+generic instances and the normal instances.
+
+11.2 		0.25
+Unfinished implementation, however a few of the generic read instances are correct so 0.25 points.
+
+
+

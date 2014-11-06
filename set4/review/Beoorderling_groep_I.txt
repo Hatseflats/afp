@@ -1,0 +1,12 @@
+opgave		punten
+10.3		1
+The code is easy to understand and all the requirements for the assignment are properly implemented.
+
+11.1 		1
+Both the read and show instances work and there are tests included. 
+
+11.2 		0.25
+A generic show implementation is given instead of a read implementation.
+
+
+
